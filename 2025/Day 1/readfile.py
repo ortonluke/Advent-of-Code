@@ -7,25 +7,27 @@ def rotate(current_value, amount):
     return (current_value + amount) % 100
 
 def count_crossings(current_value, amount):
-    size = 100
-    crossings = abs(amount) // size
+    start_raw = current_value
+    end_raw = current_value + amount
 
-    # Check partial crossing
-    remainder = amount % size
-    if amount < 0:
-        remainder = -((-amount) % size)
+    crossings = 0
 
-    new_value = (current_value + remainder) % size
+    # Moving right (increasing numbers)
+    if end_raw > start_raw:
+        # Count how many multiples of 100 we pass going upward
+        for k in range((start_raw // 100) - 1, (end_raw // 100) + 2):
+            if start_raw < k * 100 <= end_raw:
+                crossings += 1
 
-    # If rotating right and wrap-around happens
-    if amount > 0 and new_value < current_value:
-        crossings += 1
-
-    # If rotating left and wrap-around happens
-    if amount < 0 and new_value > current_value:
-        crossings += 1
+    # Moving left (decreasing numbers)
+    else:
+        # Count multiples of 100 we pass moving downward
+        for k in range((end_raw // 100) - 1, (start_raw // 100) + 2):
+            if end_raw <= k * 100 < start_raw:
+                crossings += 1
 
     return crossings
+
 
 if __name__ == "__main__":
     data = read_file()
@@ -41,9 +43,6 @@ if __name__ == "__main__":
 
         # Apply the rotation normally
         current_value = rotate(current_value, amount)
-        
-
-        if current_value == 0:
-            zero_counter += 1
+    
 
     print(zero_counter)
