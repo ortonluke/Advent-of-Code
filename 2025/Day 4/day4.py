@@ -18,11 +18,36 @@ def count_rolls(data, x, y):
             except:
                 continue
     
-    return roll_count
+    return roll_count < 4
 
 if __name__ == "__main__":
-    lines = read_file()
-    print("Roll count (0,0):", count_rolls(lines, 0, 0))
+    #data = read_file()
+    #print(f"Roll count: {0}, {len(data[0]) - 1}", count_rolls(data, 0, len(data[0]) - 1))
+    
+    data = read_file()
+    total_rolls = 0
+    for i in range(len(data)):
+        for j in range(len(data[0])):
+            if data[i][j] == '@':
+                if count_rolls(data, i, j):
+                    total_rolls += 1
 
-    print("Roll count (1,1):", count_rolls(lines, 1, 1))
-    #print(lines[0:3])
+    print(f"Total rolls: {total_rolls}")
+    print("-----")
+    #v2, same data
+    total_rolls = 0
+    rolls_removed = 1
+    while rolls_removed > 0:
+        rolls_removed = 0
+        for i in range(len(data)):
+            for j in range(len(data[0])):
+                if data[i][j] == '@':
+                    if count_rolls(data, i, j):
+                        total_rolls += 1
+                        data[i][j] = '.'
+                        rolls_removed += 1
+    print(f"Total rolls v2: {total_rolls}")
+            
+
+            
+    
